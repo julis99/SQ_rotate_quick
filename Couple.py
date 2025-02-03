@@ -8,13 +8,13 @@ class Couple:
 
     def __str__(self):
         rtn = ""
-        rtn += f"{self.boy:<15} | {self.girl:<15}"
+        rtn += f"{self.boy:<15} | {self.girl:>15}"
         return rtn
 
 
 
 
 if __name__ == "__main__":
-    dn1 = loadDancer(370452)
+    dn1 = loadDancer(123456)
     print(Couple(dn1, dn1))
         

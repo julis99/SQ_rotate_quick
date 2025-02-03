@@ -1,6 +1,7 @@
 import os
 
 from Dancer import *
+from func import *
 
 
 class Rotate:
@@ -8,7 +9,8 @@ class Rotate:
         self._avaible: list[Dancer]
         self._pausing: list[Dancer]
         self._away: list[Dancer]
-        self.possibleSquares = 0
+        self.possibleSquares: int = 0
+        self.rounds: int = 0
 
     def reloadlists(self):
         self._avaible = []
@@ -53,6 +55,13 @@ class Rotate:
         else:
             rtn += f"    {(8 - len(self._avaible)) % 8} Dancers needed for another square\n"
         return rtn
+
+    def newRound(self):
+        self.rounds += 1
+        self._avaible = sort_list_by_num_danced(self._avaible)
+        self.possibleSquares = len(self._avaible) // 8
+        self._avaible = self._avaible[:(self.possibleSquares*8)]
+
 
 
 if __name__ == "__main__":

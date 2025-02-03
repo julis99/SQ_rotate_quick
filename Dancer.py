@@ -17,6 +17,29 @@ class Dancer:
         print(f"Name: {self._name}\nID: {self.__id}\nGender: {self._gender}\nPresent: {self._present}\n"
               f"NumDanced: {self._numDanced}")
 
+    def __str__(self):
+        return self._name
+
+    def __format__(self, format_spec):
+        rtn = ""
+        try:
+            length = int(format_spec[1:])
+        except ValueError:
+            print("Wrong format spec")
+            return "ERROR"
+        if len(self._name) >= length:
+            return self._name[:length]
+        if format_spec[0] == "<":
+            for i in range(length-len(self._name)):
+                rtn += " "
+        rtn += self._name
+        if format_spec[0] == ">":
+            for i in range(length-len(self._name)):
+                rtn += " "
+        return rtn
+
+
+
     def save(self):
         try:
             with open(f"./dnc/{self.__id}.dnc", "w") as f:
@@ -37,6 +60,9 @@ class Dancer:
 
     def getName(self):
         return self._name
+
+    def getNumDanced(self)->int:
+        return self._numDanced
 
 
 def loadDancer(id: str) -> Dancer:
