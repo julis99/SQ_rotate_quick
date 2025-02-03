@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 directory="."  # Change this if you want to specify a different directory
 prefix="000"
 
