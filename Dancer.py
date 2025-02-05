@@ -38,7 +38,11 @@ class Dancer:
                 rtn += " "
         return rtn
 
+    def danced(self):
+        self._numDanced += 1
 
+    def resetNumDanced(self):
+        self._numDanced = 0
 
     def save(self):
         try:

@@ -1,14 +1,18 @@
 import os
+import random
 
 from Dancer import *
+from Couple import *
+from Square import *
 from func import *
 
 
 class Rotate:
     def __init__(self):
-        self._avaible: list[Dancer]
-        self._pausing: list[Dancer]
-        self._away: list[Dancer]
+        self._avaible: list[Dancer] = []
+        self._pausing: list[Dancer] = []
+        self._away: list[Dancer] = []
+        self._currentSquares: list[Square] = []
         self.possibleSquares: int = 0
         self.rounds: int = 0
 
@@ -56,15 +60,49 @@ class Rotate:
             rtn += f"    {(8 - len(self._avaible)) % 8} Dancers needed for another square\n"
         return rtn
 
-    def newRound(self):
+    def newRound(self) -> list[Square]:
         self.rounds += 1
+        self._currentSquares = []
         self._avaible = sort_list_by_num_danced(self._avaible)
         self.possibleSquares = len(self._avaible) // 8
-        self._avaible = self._avaible[:(self.possibleSquares*8)]
+        dancing = self._avaible[:(self.possibleSquares*8)]
+        num = 1
+        while dancing:
+            cpLst = []
+            for i in range(4):
+                dnc1 = dancing.pop(0)
+                dnc1.danced()
+                if len(dancing) == 1:
+                    dnc2 = dancing.pop(0)
+                elif len(dancing)-1 != 1:
+                    dnc2 = dancing.pop(random.randint(1, len(dancing) - 1))
+                else:
+                    dnc2 = dancing.pop(1)
+                dnc2.danced()
+                cpLst.append(Couple(dnc1, dnc2))
+            self._currentSquares.append(Square(num=num, rnd=self.rounds, cLst=cpLst))
+            num += 1
+        for sq in self._currentSquares:
+            sq.save()
+        return self._currentSquares
+
+    def resetDancers(self):
+        self._currentSquares = []
+        for dnc in self._avaible + self._pausing + self._away:
+            dnc.resetNumDanced()
+            dnc.save()
+
+
+
+
 
 
 
 if __name__ == "__main__":
     rt = Rotate()
     rt.reloadlists()
+    lst = rt.newRound()
+    for sq in lst:
+        print(sq)
+    print("====================================================================\n")
     print(rt)
