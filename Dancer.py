@@ -24,6 +24,8 @@ class Dancer:
         return self._name
 
     def __format__(self, format_spec):
+        if not format_spec:
+            return str(self)
         rtn = ""
         try:
             length = int(format_spec[1:])
@@ -73,6 +75,9 @@ class Dancer:
 
     def getGender(self) -> str:
         return self._gender
+
+    def getId(self) -> str:
+        return self.__id
 
 
 def loadDancer(id: str) -> Dancer:

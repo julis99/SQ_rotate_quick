@@ -2,7 +2,7 @@ from func import *
 from Dancer import *
 from Rotate import *
 
-MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload"]
+MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details"]
 rt: Rotate = Rotate()
 
 
@@ -20,17 +20,22 @@ def handle_specials(word):
             rt.resetDancers()
         case "reload":
             rt.reloadLists()
+        case "details":
+            id, _ = IPT_await()
+            dnc = loadDancer(id)
+            dnc.print_full_data()
+
 
 
 def main():
-    rt.reloadlists()
+    rt.reloadLists()
     while True:
         ipt, isSpecial = IPT_await(MAIN_SPECIALS)
         if isSpecial:
             handle_specials(ipt)
         else:
-            dnc = loadDancer(ipt)
-            dnc.print_full_data()
+            rt.pauseDancer(ipt, sendLog=True)
+
 
 
 if __name__ == '__main__':

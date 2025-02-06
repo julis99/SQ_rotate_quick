@@ -16,7 +16,7 @@ class Rotate:
         self.possibleSquares: int = 0
         self.rounds: int = 0
 
-    def reloadlists(self):
+    def reloadLists(self):
         self._avaible = []
         self._pausing = []
         self._away = []
@@ -84,6 +84,8 @@ class Rotate:
             num += 1
         for sq in self._currentSquares:
             sq.save()
+        self._avaible += self._pausing
+        self._pausing = []
         return self._currentSquares
 
     def newRound(self) -> list[Square]:
@@ -141,19 +143,36 @@ class Rotate:
             num += 1
         for sq in self._currentSquares:
             sq.save()
+        self._avaible += self._pausing
+        self._pausing = []
         return self._currentSquares
 
-    def pauseDancer(self, id: int) -> None:
+    def pauseDancer(self, id: str, sendLog: bool=False) -> None:
         for dnc in self._avaible:
             if dnc.getId() == id:
                 self._avaible.remove(dnc)
                 self._pausing.append(dnc)
+                if sendLog:
+                    print(f"{dnc} is pausing the next round")
                 return
         for dnc in self._pausing:
             if dnc.getId() == id:
                 self._pausing.remove(dnc)
                 dnc.switch_presence()
-    # TODO: finish the shift like avaible->pausing->away
+                self._away.append(dnc)
+                dnc.save()
+                if sendLog:
+                    print(f"{dnc} is now away")
+                return
+        for dnc in self._away:
+            if dnc.getId() == id:
+                self._away.remove(dnc)
+                dnc.switch_presence()
+                self._avaible.append(dnc)
+                dnc.save()
+                if sendLog:
+                    print(f"{dnc} is now available")
+                return
 
     def resetDancers(self):
         self._currentSquares = []
@@ -164,7 +183,7 @@ class Rotate:
 
 if __name__ == "__main__":
     rt = Rotate()
-    rt.reloadlists()
+    rt.reloadLists()
     lst = rt.newRound()
     for sq in lst:
         print(sq)
