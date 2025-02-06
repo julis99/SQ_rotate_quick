@@ -53,7 +53,7 @@ class Rotate:
         else:
             rtn += "    NO missing Dancers\n"
         rtn += "------------------------\n"
-        rtn += f"There are {self.possibleSquares} squares possible\n"
+        rtn += f"There are currently at most {self.possibleSquares} squares possible\n"
         if len(self._avaible) == 0:
             rtn += "    8 Dancers needed for the first square\n"
         else:
@@ -65,7 +65,7 @@ class Rotate:
         self._currentSquares = []
         self._avaible = sort_list_by_num_danced(self._avaible)
         self.possibleSquares = len(self._avaible) // 8
-        dancing = self._avaible[:(self.possibleSquares*8)]
+        dancing = self._avaible[:(self.possibleSquares * 8)]
         num = 1
         while dancing:
             cpLst = []
@@ -74,7 +74,7 @@ class Rotate:
                 dnc1.danced()
                 if len(dancing) == 1:
                     dnc2 = dancing.pop(0)
-                elif len(dancing)-1 != 1:
+                elif len(dancing) - 1 != 1:
                     dnc2 = dancing.pop(random.randint(1, len(dancing) - 1))
                 else:
                     dnc2 = dancing.pop(1)
@@ -86,7 +86,7 @@ class Rotate:
             sq.save()
         return self._currentSquares
 
-    def newRound(self)->list[Square]:
+    def newRound(self) -> list[Square]:
         self.rounds += 1
         self._currentSquares = []
         self._avaible = sort_list_by_num_danced(self._avaible)
@@ -109,7 +109,7 @@ class Rotate:
         if len(both) == missing:
             soft_couples = missing
         elif len(both) > missing:
-            soft_couples = missing + ((len(both)-missing)//2)
+            soft_couples = missing + ((len(both) - missing) // 2)
         elif len(both) < missing:
             soft_couples = len(both)
         self.possibleSquares = (hard_couples + soft_couples) // 4
@@ -120,8 +120,8 @@ class Rotate:
                 girls.append(both.pop(0))
         boys = sort_list_by_num_danced(boys)
         girls = sort_list_by_num_danced(girls)
-        boys = boys[:(self.possibleSquares*4)]
-        girls = girls[:(self.possibleSquares*4)]
+        boys = boys[:(self.possibleSquares * 4)]
+        girls = girls[:(self.possibleSquares * 4)]
 
         num = 0
         while boys:
@@ -143,25 +143,23 @@ class Rotate:
             sq.save()
         return self._currentSquares
 
-
-
-
-
-
-
-
-
+    def pauseDancer(self, id: int) -> None:
+        for dnc in self._avaible:
+            if dnc.getId() == id:
+                self._avaible.remove(dnc)
+                self._pausing.append(dnc)
+                return
+        for dnc in self._pausing:
+            if dnc.getId() == id:
+                self._pausing.remove(dnc)
+                dnc.switch_presence()
+    # TODO: finish the shift like avaible->pausing->away
 
     def resetDancers(self):
         self._currentSquares = []
         for dnc in self._avaible + self._pausing + self._away:
             dnc.resetNumDanced()
             dnc.save()
-
-
-
-
-
 
 
 if __name__ == "__main__":
