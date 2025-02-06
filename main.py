@@ -2,7 +2,7 @@ from func import *
 from Dancer import *
 from Rotate import *
 
-MAIN_SPECIALS = ["exit", "start", "print", "reset"]
+MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload"]
 rt: Rotate = Rotate()
 
 
@@ -18,6 +18,8 @@ def handle_specials(word):
             print(rt)
         case "reset":
             rt.resetDancers()
+        case "reload":
+            rt.reloadLists()
 
 
 def main():

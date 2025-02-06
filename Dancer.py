@@ -1,3 +1,6 @@
+from Gender import Gender
+
+
 class Dancer:
     def __init__(self):
         self._name = ""
@@ -30,11 +33,11 @@ class Dancer:
         if len(self._name) >= length:
             return self._name[:length]
         if format_spec[0] == "<":
-            for i in range(length-len(self._name)):
+            for i in range(length - len(self._name)):
                 rtn += " "
         rtn += self._name
         if format_spec[0] == ">":
-            for i in range(length-len(self._name)):
+            for i in range(length - len(self._name)):
                 rtn += " "
         return rtn
 
@@ -65,8 +68,11 @@ class Dancer:
     def getName(self):
         return self._name
 
-    def getNumDanced(self)->int:
+    def getNumDanced(self) -> int:
         return self._numDanced
+
+    def getGender(self) -> str:
+        return self._gender
 
 
 def loadDancer(id: str) -> Dancer:

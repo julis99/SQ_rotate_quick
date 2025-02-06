@@ -60,7 +60,7 @@ class Rotate:
             rtn += f"    {(8 - len(self._avaible)) % 8} Dancers needed for another square\n"
         return rtn
 
-    def newRound(self) -> list[Square]:
+    def newRound_noGender(self) -> list[Square]:
         self.rounds += 1
         self._currentSquares = []
         self._avaible = sort_list_by_num_danced(self._avaible)
@@ -85,6 +85,72 @@ class Rotate:
         for sq in self._currentSquares:
             sq.save()
         return self._currentSquares
+
+    def newRound(self)->list[Square]:
+        self.rounds += 1
+        self._currentSquares = []
+        self._avaible = sort_list_by_num_danced(self._avaible)
+        boys = []
+        girls = []
+        both = []
+        for dancer in self._avaible:
+            match dancer.getGender():
+                case "b":
+                    boys.append(dancer)
+                case "g":
+                    girls.append(dancer)
+                case "b/g":
+                    both.append(dancer)
+                case _:
+                    raise ValueError
+        hard_couples = min(len(boys), len(girls))
+        missing = max(len(boys), len(girls)) - hard_couples
+        soft_couples = 0
+        if len(both) == missing:
+            soft_couples = missing
+        elif len(both) > missing:
+            soft_couples = missing + ((len(both)-missing)//2)
+        elif len(both) < missing:
+            soft_couples = len(both)
+        self.possibleSquares = (hard_couples + soft_couples) // 4
+        while both:
+            if len(boys) <= len(girls):
+                boys.append(both.pop(0))
+            else:
+                girls.append(both.pop(0))
+        boys = sort_list_by_num_danced(boys)
+        girls = sort_list_by_num_danced(girls)
+        boys = boys[:(self.possibleSquares*4)]
+        girls = girls[:(self.possibleSquares*4)]
+
+        num = 0
+        while boys:
+            cpLst = []
+            for i in range(4):
+                dnc1 = boys.pop(0)
+                dnc1.danced()
+                if len(girls) == 1:
+                    dnc2 = girls.pop(0)
+                elif len(girls) - 1 != 1:
+                    dnc2 = girls.pop(random.randint(1, len(girls) - 1))
+                else:
+                    dnc2 = girls.pop(1)
+                dnc2.danced()
+                cpLst.append(Couple(dnc1, dnc2))
+            self._currentSquares.append(Square(num=num, rnd=self.rounds, cLst=cpLst))
+            num += 1
+        for sq in self._currentSquares:
+            sq.save()
+        return self._currentSquares
+
+
+
+
+
+
+
+
+
 
     def resetDancers(self):
         self._currentSquares = []
