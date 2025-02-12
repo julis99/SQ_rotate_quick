@@ -2,7 +2,7 @@ from func import *
 from Dancer import *
 from Rotate import *
 
-MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details"]
+MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new"]
 rt: Rotate = Rotate()
 
 
@@ -24,6 +24,11 @@ def handle_specials(word):
             id, _ = IPT_await()
             dnc = loadDancer(id)
             dnc.print_full_data()
+        case "new":
+            dnc = create_new_Dancer()
+            dnc.save()
+            print(f"Created {dnc:+g}")
+
 
 
 

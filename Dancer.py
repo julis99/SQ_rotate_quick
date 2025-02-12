@@ -9,7 +9,7 @@ class Dancer:
         self._present = False
         self._numDanced = 0
 
-    def set_vals(self, name: str, id: str, gender: str, present: bool, num: int):
+    def set_vals(self, name: str, id: str, gender: str, present: bool, num: int = 0):
         self._name = name
         self.__id = id
         self._gender = gender
@@ -27,6 +27,14 @@ class Dancer:
         if not format_spec:
             return str(self)
         rtn = ""
+        if format_spec[0] == "+":
+            match format_spec[1]:
+                case "n":
+                    return str(self) + f"[n:{self._numDanced}]"
+                case "g":
+                    return str(self) + f"[g:{self._gender}]"
+                case "p":
+                    return str(self) + f"[p:{self._present}]"
         try:
             length = int(format_spec[1:])
         except ValueError:
@@ -59,6 +67,7 @@ class Dancer:
                 f.writelines(
                     [f"{self._name}\n", f"{self.__id}\n", f"{self._gender}\n", f"{prs}\n", f"{self._numDanced}"])
         except FileNotFoundError:
+
             print("File not found")
 
     def is_present(self):

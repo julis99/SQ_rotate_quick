@@ -34,7 +34,7 @@ class Rotate:
         if self._avaible:
             rtn += "Available Dancers:\n"
             for dnc in self._avaible:
-                rtn += f"    {dnc.getName()}\n"
+                rtn += f"    {dnc:+n}\n"
         else:
             rtn += "    NO Dancers available\n"
         rtn += "------------------------\n"
@@ -91,7 +91,6 @@ class Rotate:
     def newRound(self) -> list[Square]:
         self.rounds += 1
         self._currentSquares = []
-        self._avaible = sort_list_by_num_danced(self._avaible)
         boys = []
         girls = []
         both = []
