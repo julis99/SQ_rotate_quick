@@ -24,17 +24,23 @@ class Dancer:
         return self._name
 
     def __format__(self, format_spec):
+
         if not format_spec:
             return str(self)
         rtn = ""
+        # when formatted with + one can add additional information to the name of the Dancer
         if format_spec[0] == "+":
             match format_spec[1]:
-                case "n":
+                case "n":  # the number of danced rounds
                     return str(self) + f"[n:{self._numDanced}]"
-                case "g":
+                case "g":  # the gender
                     return str(self) + f"[g:{self._gender}]"
-                case "p":
+                case "p":  # presence (True / False)
                     return str(self) + f"[p:{self._present}]"
+                case "a":  # all of the above
+                    return str(self) + f"[n:{self._numDanced}, g:{self._gender}, p:{self._present}]"
+                case _:  # wrong specifier given, just returning the string
+                    return str(self) + f"[unknown spec {format_spec}]"
         try:
             length = int(format_spec[1:])
         except ValueError:
@@ -89,13 +95,22 @@ class Dancer:
         return self.__id
 
 
-def loadDancer(id: str) -> Dancer:
-    with open(f"./dnc/{id}.dnc", "r") as f:
-        name, id, gender, present_str, num_str = f.read().split("\n")
-        rtn = Dancer()
-        present = bool(int(present_str))
-        rtn.set_vals(name, id, gender, present, int(num_str))
-        return rtn
+def loadDancer(id: str) -> Dancer | None:
+    """
+    Loads a Dancer from dnc directory if the file exists
+    :param id: The id used to save the dancer
+    :returns: The dancer with entered id or None if {id}.dnc does not exist
+    """
+    try:
+        with open(f"./dnc/{id}.dnc", "r") as f:
+            name, id, gender, present_str, num_str = f.read().split("\n")
+            rtn = Dancer()
+            present = bool(int(present_str))
+            rtn.set_vals(name, id, gender, present, int(num_str))
+            return rtn
+    except FileNotFoundError:
+        print(f"No Dancer with id [{id}] found")
+        return None
 
 
 def loadDancerFile(file: str) -> Dancer:
@@ -114,3 +129,4 @@ if __name__ == "__main__":
     dancer.save()
     dancer2 = loadDancer("370452")
     dancer2.print_full_data()
+    print(f"{dancer2:<2}")

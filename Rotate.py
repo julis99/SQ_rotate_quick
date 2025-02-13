@@ -41,7 +41,7 @@ class Rotate:
         if self._pausing:
             rtn += "Pausing Dancers:\n"
             for dnc in self._pausing:
-                rtn += f"    {dnc.getName()}\n"
+                rtn += f"    {dnc:+a}\n"
         else:
             rtn += "    NO pausing Dancers\n"
 
@@ -114,6 +114,8 @@ class Rotate:
         elif len(both) < missing:
             soft_couples = len(both)
         self.possibleSquares = (hard_couples + soft_couples) // 4
+        if self.possibleSquares < 1:
+            print(f"No Squares possible\n[boys: {len(boys)}]\n[girls: {len(girls)}]\n[both: {len(both)}]\n")
         while both:
             if len(boys) <= len(girls):
                 boys.append(both.pop(0))
@@ -146,7 +148,7 @@ class Rotate:
         self._pausing = []
         return self._currentSquares
 
-    def pauseDancer(self, id: str, sendLog: bool=False) -> None:
+    def pauseDancer(self, id: str, sendLog: bool = False) -> None:
         for dnc in self._avaible:
             if dnc.getId() == id:
                 self._avaible.remove(dnc)
