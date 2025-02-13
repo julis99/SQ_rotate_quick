@@ -29,17 +29,50 @@ class Rotate:
                     self._avaible.append(dnc)
         self.possibleSquares = len(self._avaible) // 8
 
+    def evaluate(self, retLists:bool = False)-> None | list[list[Dancer]]:
+        """
+
+        :param retLists:
+        :return:
+        """
+        boys = []
+        girls = []
+        both = []
+        for dancer in self._avaible:
+            match dancer.getGender():
+                case "b":
+                    boys.append(dancer)
+                case "g":
+                    girls.append(dancer)
+                case "b/g":
+                    both.append(dancer)
+                case _:
+                    raise ValueError
+        hard_couples = min(len(boys), len(girls))
+        missing = max(len(boys), len(girls)) - hard_couples
+        soft_couples = 0
+        if len(both) == missing:
+            soft_couples = missing
+        elif len(both) > missing:
+            soft_couples = missing + ((len(both) - missing) // 2)
+        elif len(both) < missing:
+            soft_couples = len(both)
+        self.possibleSquares = (hard_couples + soft_couples) // 4
+        if retLists:
+            return [boys, girls, both]
+        return None
+
     def __str__(self):
         rtn = ""
         if self._avaible:
-            rtn += "Available Dancers:\n"
+            rtn += f"Available Dancers ({len(self._avaible)}):\n"
             for dnc in self._avaible:
                 rtn += f"    {dnc:+n}\n"
         else:
             rtn += "    NO Dancers available\n"
         rtn += "------------------------\n"
         if self._pausing:
-            rtn += "Pausing Dancers:\n"
+            rtn += f"Pausing Dancers ({len(self._pausing)}):\n"
             for dnc in self._pausing:
                 rtn += f"    {dnc:+a}\n"
         else:
@@ -47,12 +80,13 @@ class Rotate:
 
         rtn += "------------------------\n"
         if self._away:
-            rtn += "Missing Dancers:\n"
+            rtn += f"Missing Dancers ({len(self._away)}):\n"
             for dnc in self._away:
                 rtn += f"    {dnc.getName()}\n"
         else:
             rtn += "    NO missing Dancers\n"
         rtn += "------------------------\n"
+        self.evaluate(retLists=False)
         rtn += f"There are currently at most {self.possibleSquares} squares possible\n"
         if len(self._avaible) == 0:
             rtn += "    8 Dancers needed for the first square\n"
@@ -90,29 +124,7 @@ class Rotate:
 
     def newRound(self) -> list[Square]:
         self._currentSquares = []
-        boys = []
-        girls = []
-        both = []
-        for dancer in self._avaible:
-            match dancer.getGender():
-                case "b":
-                    boys.append(dancer)
-                case "g":
-                    girls.append(dancer)
-                case "b/g":
-                    both.append(dancer)
-                case _:
-                    raise ValueError
-        hard_couples = min(len(boys), len(girls))
-        missing = max(len(boys), len(girls)) - hard_couples
-        soft_couples = 0
-        if len(both) == missing:
-            soft_couples = missing
-        elif len(both) > missing:
-            soft_couples = missing + ((len(both) - missing) // 2)
-        elif len(both) < missing:
-            soft_couples = len(both)
-        self.possibleSquares = (hard_couples + soft_couples) // 4
+        boys, girls, both = self.evaluate(True)
         if self.possibleSquares < 1:
             print(f"No Squares possible\n[boys: {len(boys)}]\n[girls: {len(girls)}]\n[both: {len(both)}]\n")
             return []
@@ -183,6 +195,38 @@ class Rotate:
         for dnc in self._avaible + self._pausing + self._away:
             dnc.resetNumDanced()
             dnc.save()
+
+    def detailed(self) -> str:
+        self.evaluate()
+        rtn = ""
+        if self._avaible:
+            rtn += "Available Dancers:\n"
+            for dnc in self._avaible:
+                rtn += f"    {dnc:+a}\n"
+        else:
+            rtn += "    NO Dancers available\n"
+        rtn += "------------------------\n"
+        if self._pausing:
+            rtn += "Pausing Dancers:\n"
+            for dnc in self._pausing:
+                rtn += f"    {dnc:+a}\n"
+        else:
+            rtn += "    NO pausing Dancers\n"
+
+        rtn += "------------------------\n"
+        if self._away:
+            rtn += "Missing Dancers:\n"
+            for dnc in self._away:
+                rtn += f"    {dnc:+a}\n"
+        else:
+            rtn += "    NO missing Dancers\n"
+        rtn += "------------------------\n"
+        rtn += f"There are currently at most {self.possibleSquares} squares possible\n"
+        if len(self._avaible) == 0:
+            rtn += "    8 Dancers needed for the first square\n"
+        else:
+            rtn += f"    {(8 - len(self._avaible)) % 8} Dancers needed for another square\n"
+        return rtn
 
 
 if __name__ == "__main__":

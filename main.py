@@ -40,7 +40,10 @@ def MAIN_handle_specials(word):
         case "reload":
             rt.reloadLists()
         case "details":
-            id, _ = IPT_await()
+            id, isSpecial = IPT_await(["all"], "Scan Id or type 'all': ")
+            if isSpecial:
+                print(rt.detailed())
+                return
             dnc = loadDancer(id)
             if dnc:
                 dnc.print_full_data()
@@ -66,7 +69,7 @@ def MAIN_new_round() -> bool:
         return False
     for square in sLst:
         print(square)
-        return True
+    return True
 
 
 def main():
