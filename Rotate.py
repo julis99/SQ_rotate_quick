@@ -89,7 +89,6 @@ class Rotate:
         return self._currentSquares
 
     def newRound(self) -> list[Square]:
-        self.rounds += 1
         self._currentSquares = []
         boys = []
         girls = []
@@ -116,6 +115,9 @@ class Rotate:
         self.possibleSquares = (hard_couples + soft_couples) // 4
         if self.possibleSquares < 1:
             print(f"No Squares possible\n[boys: {len(boys)}]\n[girls: {len(girls)}]\n[both: {len(both)}]\n")
+            return []
+
+        self.rounds += 1
         while both:
             if len(boys) <= len(girls):
                 boys.append(both.pop(0))
@@ -140,7 +142,7 @@ class Rotate:
                     dnc2 = girls.pop(1)
                 dnc2.danced()
                 cpLst.append(Couple(dnc1, dnc2))
-            self._currentSquares.append(Square(num=num, rnd=self.rounds, cLst=cpLst))
+            self._currentSquares.append(Square(num=num + 1, rnd=self.rounds, cLst=cpLst))
             num += 1
         for sq in self._currentSquares:
             sq.save()
@@ -177,6 +179,7 @@ class Rotate:
 
     def resetDancers(self):
         self._currentSquares = []
+        self.rounds = 0
         for dnc in self._avaible + self._pausing + self._away:
             dnc.resetNumDanced()
             dnc.save()

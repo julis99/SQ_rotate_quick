@@ -33,12 +33,12 @@ class Square:
 
     def __str__(self):
         rtn = ""
-        rtn += f"########### SQUARE {self.__number:02} ##############\n"
+        rtn += f"####### SQUARE {self.__number:02} of ROUND {self.__round:02} #######\n"
         rtn += f"{self.__c1}\n"
         rtn += f"{self.__c2}\n"
         rtn += f"{self.__c3}\n"
         rtn += f"{self.__c4}\n"
-        rtn += "####################################\n"
+        rtn += "#####################################\n"
         return rtn
 
     def save(self):
@@ -50,6 +50,5 @@ class Square:
 
 if __name__ == "__main__":
     cp1, cp2, cp3, cp4 = TEST_get_test_Couples(4)
-    sq = Square(1, 0)
-    sq.setCouples([cp1, cp2, cp3, cp4])
+    sq = Square(1, 0, [cp1, cp2, cp3, cp4])
     print(sq)

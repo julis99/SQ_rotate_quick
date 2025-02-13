@@ -38,7 +38,7 @@ class Dancer:
                 case "p":  # presence (True / False)
                     return str(self) + f"[p:{self._present}]"
                 case "a":  # all of the above
-                    return str(self) + f"[n:{self._numDanced}, g:{self._gender}, p:{self._present}]"
+                    return str(self) + f"[n:{self._numDanced}, g:{self._gender:3}, p:{self._present}]"
                 case _:  # wrong specifier given, just returning the string
                     return str(self) + f"[unknown spec {format_spec}]"
         try:
@@ -125,8 +125,8 @@ def loadDancerFile(file: str) -> Dancer:
 
 if __name__ == "__main__":
     dancer = Dancer()
-    dancer.set_vals("Julian Keune", "370452", "b/g", True, 5)
+    dancer.set_vals("Julian Keune", "370452", "b", True, 5)
     dancer.save()
     dancer2 = loadDancer("370452")
     dancer2.print_full_data()
-    print(f"{dancer2:<2}")
+    print(f"{dancer2:+a}")
