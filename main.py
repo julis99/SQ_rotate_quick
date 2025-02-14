@@ -12,8 +12,8 @@ MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              " - reset   - Resets the num Danced for all registered Dancers\n"
              " - reload  - Reloads the registered Dancers into the Rotation\n"
              " - details - Get Details for a specific Dancer\n"
-             " - new     - Register a new Dancer\n"
-             " - alter   - Alter a already registered Dancer (or create new Dancer if ID unknown)"
+             " - new     - Register a new Dancer (Discards Pausing)\n"
+             " - alter   - Alter a already registered Dancer (or create new Dancer if ID unknown) (Discards Pausing)"
              " - help    - Shows this menu")
 
 MAIN_WELCOME = r""" ____   ___      ____   ___ _____  _  _____ _____     ___  _   _ ___ ____ _  __
@@ -53,8 +53,12 @@ def MAIN_handle_specials(word):
             dnc = create_new_Dancer()
             dnc.save()
             print(f"Created {dnc:+g}")
+            rt.reloadLists()
         case "alter":
             dnc = alter_existing_Dancer()
+            dnc.save()
+            print(f"Altered {dnc}")
+            rt.reloadLists()
         case "help":
             print(MAIN_HELP)
         case _:
