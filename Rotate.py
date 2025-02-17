@@ -227,6 +227,14 @@ class Rotate:
         else:
             rtn += f"    {(8 - len(self._avaible)) % 8} Dancers needed for another square\n"
         return rtn
+    
+    def clearAvailable(self):
+        for dnc in self._avaible + self._pausing:
+            dnc.switch_presence()
+            dnc.save()
+        self.reloadLists()
+        return
+
 
 
 if __name__ == "__main__":
