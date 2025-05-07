@@ -116,22 +116,23 @@ def get_present_dancers(lst: list[Dancer]) -> list[Dancer]:
     return rtn
 
 
-def sort_list_by_num_danced(lst: list[Dancer]) -> list[Dancer]:
+def sort_list_by_last_danced(lst: list[Dancer]) -> list[Dancer]:
     rtn = []
     while lst:
         minimum = 1000
         for dnc in lst:
-            if dnc.getNumDanced() < minimum:
-                minimum = dnc.getNumDanced()
+            if dnc.getLastDanced() < minimum:
+                minimum = dnc.getLastDanced()
         for dnc in lst:
-            if dnc.getNumDanced() == minimum:
+            if dnc.getLastDanced() == minimum:
                 rtn.append(dnc)
                 lst.remove(dnc)
+                continue
     return rtn
 
 
 if __name__ == "__main__":
-    for dancer in get_present_dancers(sort_list_by_num_danced(load_data_base())):
+    for dancer in get_present_dancers(sort_list_by_last_danced(load_data_base())):
         print(dancer)
 
     create_new_Dancer(370452)

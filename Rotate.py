@@ -97,7 +97,7 @@ class Rotate:
     def newRound_noGender(self) -> list[Square]:
         self.rounds += 1
         self._currentSquares = []
-        self._avaible = sort_list_by_num_danced(self._avaible)
+        self._avaible = sort_list_by_last_danced(self._avaible)
         self.possibleSquares = len(self._avaible) // 8
         dancing = self._avaible[:(self.possibleSquares * 8)]
         num = 1
@@ -112,7 +112,8 @@ class Rotate:
                     dnc2 = dancing.pop(random.randint(1, len(dancing) - 1))
                 else:
                     dnc2 = dancing.pop(1)
-                dnc2.danced()
+                dnc1.danced(self.rounds)
+                dnc2.danced(self.rounds)
                 cpLst.append(Couple(dnc1, dnc2))
             self._currentSquares.append(Square(num=num, rnd=self.rounds, cLst=cpLst))
             num += 1
@@ -135,8 +136,8 @@ class Rotate:
                 boys.append(both.pop(0))
             else:
                 girls.append(both.pop(0))
-        boys = sort_list_by_num_danced(boys)
-        girls = sort_list_by_num_danced(girls)
+        boys = sort_list_by_last_danced(boys)
+        girls = sort_list_by_last_danced(girls)
         boys = boys[:(self.possibleSquares * 4)]
         girls = girls[:(self.possibleSquares * 4)]
 
@@ -145,14 +146,14 @@ class Rotate:
             cpLst = []
             for i in range(4):
                 dnc1 = boys.pop(0)
-                dnc1.danced()
+                dnc1.danced(self.rounds)
                 if len(girls) == 1:
                     dnc2 = girls.pop(0)
                 elif len(girls) - 1 != 1:
                     dnc2 = girls.pop(random.randint(1, len(girls) - 1))
                 else:
                     dnc2 = girls.pop(1)
-                dnc2.danced()
+                dnc2.danced(self.rounds)
                 cpLst.append(Couple(dnc1, dnc2))
             self._currentSquares.append(Square(num=num + 1, rnd=self.rounds, cLst=cpLst))
             num += 1

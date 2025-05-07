@@ -7,18 +7,18 @@ class Dancer:
         self.__id = ""
         self._gender = ""
         self._present = False
-        self._numDanced = 0
+        self._dancedLast = 0
 
     def set_vals(self, name: str, id: str, gender: str, present: bool, num: int = 0):
         self._name = name
         self.__id = id
         self._gender = gender
         self._present = present
-        self._numDanced = num
+        self._dancedLast = num
 
     def print_full_data(self):
         print(f"Name: {self._name}\nID: {self.__id}\nGender: {self._gender}\nPresent: {self._present}\n"
-              f"NumDanced: {self._numDanced}")
+              f"DancedLast: {self._dancedLast}")
 
     def __str__(self):
         return self._name
@@ -32,13 +32,13 @@ class Dancer:
         if format_spec[0] == "+":
             match format_spec[1]:
                 case "n":  # the number of danced rounds
-                    return str(self) + f"[n:{self._numDanced}]"
+                    return str(self) + f"[n:{self._dancedLast}]"
                 case "g":  # the gender
                     return str(self) + f"[g:{self._gender}]"
                 case "p":  # presence (True / False)
                     return str(self) + f"[p:{self._present}]"
                 case "a":  # all of the above
-                    return str(self) + f"[n:{self._numDanced}, g:{self._gender:3}, p:{self._present}]"
+                    return str(self) + f"[n:{self._dancedLast}, g:{self._gender:3}, p:{self._present}]"
                 case _:  # wrong specifier given, just returning the string
                     return str(self) + f"[unknown spec {format_spec}]"
         try:
@@ -57,11 +57,11 @@ class Dancer:
                 rtn += " "
         return rtn
 
-    def danced(self):
-        self._numDanced += 1
+    def danced(self, round: int):
+        self._dancedLast = round
 
     def resetNumDanced(self):
-        self._numDanced = 0
+        self._dancedLast = 0
 
     def save(self):
         try:
@@ -71,7 +71,7 @@ class Dancer:
                 else:
                     prs = "0"
                 f.writelines(
-                    [f"{self._name}\n", f"{self.__id}\n", f"{self._gender}\n", f"{prs}\n", f"{self._numDanced}"])
+                    [f"{self._name}\n", f"{self.__id}\n", f"{self._gender}\n", f"{prs}\n", f"{self._dancedLast}"])
         except FileNotFoundError:
 
             print("File not found")
@@ -85,8 +85,8 @@ class Dancer:
     def getName(self):
         return self._name
 
-    def getNumDanced(self) -> int:
-        return self._numDanced
+    def getLastDanced(self) -> int:
+        return self._dancedLast
 
     def getGender(self) -> str:
         return self._gender
