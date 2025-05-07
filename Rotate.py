@@ -61,6 +61,9 @@ class Rotate:
         if retLists:
             return [boys, girls, both]
         return None
+    
+    def manipulate(self, round: int) -> None:
+        self.rounds = round
 
     def __str__(self):
         rtn = ""
@@ -126,6 +129,7 @@ class Rotate:
     def newRound(self) -> list[Square]:
         self._currentSquares = []
         boys, girls, both = self.evaluate(True)
+        print(f"{boys}\n\n{girls}\n\n{both}\n")
         if self.possibleSquares < 1:
             print(f"No Squares possible\n[boys: {len(boys)}]\n[girls: {len(girls)}]\n[both: {len(both)}]\n")
             return []
@@ -137,10 +141,10 @@ class Rotate:
             else:
                 girls.append(both.pop(0))
         boys = sort_list_by_last_danced(boys)
+        print(boys)
         girls = sort_list_by_last_danced(girls)
         boys = boys[:(self.possibleSquares * 4)]
         girls = girls[:(self.possibleSquares * 4)]
-
         num = 0
         while boys:
             cpLst = []
@@ -194,7 +198,7 @@ class Rotate:
         self._currentSquares = []
         self.rounds = 0
         for dnc in self._avaible + self._pausing + self._away:
-            dnc.resetNumDanced()
+            dnc.resetNumbers()
             dnc.save()
 
     def detailed(self) -> str:

@@ -1,7 +1,7 @@
 import os
 from Rotate import *
 
-MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout", "help"]
+MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout","manipulate", "help"]
 MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              "Help Menu\n"
              "Enter your Barcode to become pausing, away, or available again\n"
@@ -62,6 +62,9 @@ def MAIN_handle_specials(word):
             rt.reloadLists()
         case "logout":
             rt.clearAvailable()
+        case "manipulate":
+            rd, _ = IPT_await(msg="Enter Round Number: ")
+            rt.manipulate(int(rd))
         case "help":
             print(MAIN_HELP)
         case _:

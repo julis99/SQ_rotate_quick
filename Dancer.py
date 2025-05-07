@@ -8,13 +8,18 @@ class Dancer:
         self._gender = ""
         self._present = False
         self._dancedLast = 0
+        self._numDanced = 0
 
-    def set_vals(self, name: str, id: str, gender: str, present: bool, num: int = 0):
+    def set_vals(self, name: str, id: str, gender: str, present: bool, last: int = 0, num: int = 0) -> None:
+        """
+        Sets the values of the dancer.
+        """
         self._name = name
         self.__id = id
         self._gender = gender
         self._present = present
-        self._dancedLast = num
+        self._dancedLast = last
+        self._numDanced = num
 
     def print_full_data(self):
         print(f"Name: {self._name}\nID: {self.__id}\nGender: {self._gender}\nPresent: {self._present}\n"
@@ -59,9 +64,11 @@ class Dancer:
 
     def danced(self, round: int):
         self._dancedLast = round
+        self._numDanced += 1
 
-    def resetNumDanced(self):
+    def resetNumbers(self):
         self._dancedLast = 0
+        self._numDanced = 0
 
     def save(self):
         try:
@@ -71,7 +78,7 @@ class Dancer:
                 else:
                     prs = "0"
                 f.writelines(
-                    [f"{self._name}\n", f"{self.__id}\n", f"{self._gender}\n", f"{prs}\n", f"{self._dancedLast}"])
+                    [f"{self._name}\n", f"{self.__id}\n", f"{self._gender}\n", f"{prs}\n", f"{self._dancedLast}\n", f"{self._numDanced}"])
         except FileNotFoundError:
 
             print("File not found")
@@ -87,6 +94,9 @@ class Dancer:
 
     def getLastDanced(self) -> int:
         return self._dancedLast
+    
+    def getNumDanced(self) -> int:
+        return self._numDanced
 
     def getGender(self) -> str:
         return self._gender
@@ -103,10 +113,10 @@ def loadDancer(id: str) -> Dancer | None:
     """
     try:
         with open(f"./dnc/{id}.dnc", "r") as f:
-            name, id, gender, present_str, num_str = f.read().split("\n")
+            name, id, gender, present_str, last_str, num_str = f.read().split("\n")
             rtn = Dancer()
             present = bool(int(present_str))
-            rtn.set_vals(name, id, gender, present, int(num_str))
+            rtn.set_vals(name, id, gender, present, int(last_str), int(num_str))
             return rtn
     except FileNotFoundError:
         print(f"No Dancer with id [{id}] found")
@@ -116,10 +126,10 @@ def loadDancer(id: str) -> Dancer | None:
 def loadDancerFile(file: str) -> Dancer:
     if file.endswith(".dnc"):
         with open(file, "r") as f:
-            name, id, gender, present_str, num_str = f.read().split("\n")
+            name, id, gender, present_str, last_str, num_str = f.read().split("\n")
             rtn = Dancer()
             present = bool(int(present_str))
-            rtn.set_vals(name, id, gender, present, int(num_str))
+            rtn.set_vals(name, id, gender, present, int(last_str), int(num_str))
             return rtn
 
 
