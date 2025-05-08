@@ -129,7 +129,6 @@ class Rotate:
     def newRound(self) -> list[Square]:
         self._currentSquares = []
         boys, girls, both = self.evaluate(True)
-        print(f"{boys}\n\n{girls}\n\n{both}\n")
         if self.possibleSquares < 1:
             print(f"No Squares possible\n[boys: {len(boys)}]\n[girls: {len(girls)}]\n[both: {len(both)}]\n")
             return []
@@ -141,7 +140,6 @@ class Rotate:
             else:
                 girls.append(both.pop(0))
         boys = sort_list_by_last_danced(boys)
-        print(boys)
         girls = sort_list_by_last_danced(girls)
         boys = boys[:(self.possibleSquares * 4)]
         girls = girls[:(self.possibleSquares * 4)]
