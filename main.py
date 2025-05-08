@@ -1,7 +1,7 @@
 import os
 from Rotate import *
 
-MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout", "manipulate", "help"]
+MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout", "manipulate", "delete", "help"]
 MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              "Help Menu\n"
              "Enter your Barcode to become pausing, away, or available again\n"
@@ -10,12 +10,13 @@ MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              " - start      - Starts a new round\n"
              " - print      - Prints all registered Dancers (split into available, pausing and away)\n"
              " - reset      - Resets the num Danced for all registered Dancers\n"
-             " - reload     - Reloads the registered Dancers into the Rotation\n"
+             " - reload     - Reloads the registered Dancers into the Rotation (Discards Pausing)\n"
              " - details    - Get Details for a specific Dancer\n"
              " - new        - Register a new Dancer (Discards Pausing)\n"
              " - alter      - Alter a already registered Dancer (or create new Dancer if ID unknown) (Discards Pausing)\n"
              " - logout     - Makes every Dancer be away\n"
              " - manipulate - Manipulate the current round\n"
+             " - delete     - Delete a Dancer\n"
              " - help       - Shows this menu")
 
 MAIN_WELCOME = r""" ____   ___      ____   ___ _____  _  _____ _____     ___  _   _ ___ ____ _  __
@@ -66,6 +67,13 @@ def MAIN_handle_specials(word):
         case "manipulate":
             rd, _ = IPT_await(msg="Enter Round Number: ")
             rt.manipulate(int(rd))
+        case "delete":
+            id, _ = IPT_await(msg="Enter Dancer Id: ")
+            if existDancer(id):
+                rt.deleteDancer(id)
+                print(f"Deleted Dancer with id {id}")
+            else:
+                print(f"No dancer with id [{id}] found")
         case "help":
             print(MAIN_HELP)
         case _:

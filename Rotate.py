@@ -28,6 +28,7 @@ class Rotate:
                 else:
                     self._avaible.append(dnc)
         self.possibleSquares = len(self._avaible) // 8
+        self.evaluate(False)
 
     def evaluate(self, retLists:bool = False)-> None | list[list[Dancer]]:
         """
@@ -237,6 +238,21 @@ class Rotate:
             dnc.save()
         self.reloadLists()
         return
+    
+    def deleteDancer(self, id: str) -> None:
+        for dnc in self._avaible + self._pausing + self._away:
+            if dnc.getId() == id:
+                if dnc in self._avaible:
+                    self._avaible.remove(dnc)
+                elif dnc in self._pausing:
+                    self._pausing.remove(dnc)
+                elif dnc in self._away:
+                    self._away.remove(dnc)
+                else:
+                    raise ValueError("Dancer not found")
+                os.remove(f"./dnc/{dnc.getId()}.dnc")
+                return
+        print("Dancer not found")
 
 
 
