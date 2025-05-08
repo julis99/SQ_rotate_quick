@@ -1,21 +1,22 @@
 import os
 from Rotate import *
 
-MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout","manipulate", "help"]
+MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout", "manipulate", "help"]
 MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              "Help Menu\n"
              "Enter your Barcode to become pausing, away, or available again\n"
              "Or Enter a special keyword:\n"
-             " - exit    - Exits this program (Warning: This will lose track of any pausing dancers)\n"
-             " - start   - Starts a new round\n"
-             " - print   - Prints all registered Dancers (split into available, pausing and away)\n"
-             " - reset   - Resets the num Danced for all registered Dancers\n"
-             " - reload  - Reloads the registered Dancers into the Rotation\n"
-             " - details - Get Details for a specific Dancer\n"
-             " - new     - Register a new Dancer (Discards Pausing)\n"
-             " - alter   - Alter a already registered Dancer (or create new Dancer if ID unknown) (Discards Pausing)\n"
-             " - logout  - Makes every Dancer be away"
-             " - help    - Shows this menu")
+             " - exit       - Exits this program (Warning: This will lose track of any pausing dancers)\n"
+             " - start      - Starts a new round\n"
+             " - print      - Prints all registered Dancers (split into available, pausing and away)\n"
+             " - reset      - Resets the num Danced for all registered Dancers\n"
+             " - reload     - Reloads the registered Dancers into the Rotation\n"
+             " - details    - Get Details for a specific Dancer\n"
+             " - new        - Register a new Dancer (Discards Pausing)\n"
+             " - alter      - Alter a already registered Dancer (or create new Dancer if ID unknown) (Discards Pausing)\n"
+             " - logout     - Makes every Dancer be away\n"
+             " - manipulate - Manipulate the current round\n"
+             " - help       - Shows this menu")
 
 MAIN_WELCOME = r""" ____   ___      ____   ___ _____  _  _____ _____     ___  _   _ ___ ____ _  __
 / ___| / _ \    |  _ \ / _ \_   _|/ \|_   _| ____|   / _ \| | | |_ _/ ___| |/ /
