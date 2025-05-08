@@ -90,7 +90,18 @@ def main():
         if isSpecial:
             MAIN_handle_specials(ipt)
         else:
-            rt.pauseDancer(ipt, sendLog=True)
+            if existDancer(ipt):
+                rt.pauseDancer(ipt, sendLog=True)
+            else:
+                print(f"No Dancer with id [{ipt}] found")
+                if IPT_getBool("Create new Dancer? (y/n)"):
+                    dnc = create_new_Dancer(ipt)
+                    dnc.save()
+                    rt.reloadLists()
+                else:
+                    print("Dancer not created")
+
+            
 
 
 if __name__ == '__main__':

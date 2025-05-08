@@ -131,6 +131,19 @@ def loadDancerFile(file: str) -> Dancer:
             present = bool(int(present_str))
             rtn.set_vals(name, id, gender, present, int(last_str), int(num_str))
             return rtn
+        
+
+def existDancer(id: str) -> bool:
+    """
+    Checks if a dancer with the given id exists in the dnc directory
+    :param id: The id used to save the dancer
+    :returns: True if the dancer exists, False otherwise
+    """
+    try:
+        with open(f"./dnc/{id}.dnc", "r") as f:
+            return True
+    except FileNotFoundError:
+        return False
 
 
 if __name__ == "__main__":
