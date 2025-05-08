@@ -1,7 +1,7 @@
 import os
 from Rotate import *
 
-MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout", "manipulate", "delete", "help"]
+MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout", "manipulate", "delete", "show_ids", "help"]
 MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              "Help Menu\n"
              "Enter your Barcode to become pausing, away, or available again\n"
@@ -17,6 +17,7 @@ MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              " - logout     - Makes every Dancer be away\n"
              " - manipulate - Manipulate the current round\n"
              " - delete     - Delete a Dancer\n"
+             " - show_ids   - Shows all registered Dancer IDs\n"
              " - help       - Shows this menu")
 
 MAIN_WELCOME = r""" ____   ___      ____   ___ _____  _  _____ _____     ___  _   _ ___ ____ _  __
@@ -74,6 +75,8 @@ def MAIN_handle_specials(word):
                 print(f"Deleted Dancer with id {id}")
             else:
                 print(f"No dancer with id [{id}] found")
+        case "show_ids":
+            rt.print_ids()
         case "help":
             print(MAIN_HELP)
         case _:

@@ -254,6 +254,12 @@ class Rotate:
                 return
         print("Dancer not found")
 
+    def print_ids(self) -> None:
+        print("Registered Dancers:")
+        for dnc in self._avaible + self._pausing + self._away:
+            print(f"{dnc:>15} : [{dnc.getId()}]")
+        print("====================================================================\n")
+
 
 
 if __name__ == "__main__":
