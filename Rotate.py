@@ -68,6 +68,7 @@ class Rotate:
 
     def __str__(self):
         rtn = ""
+        self.evaluate(False)
         if self._avaible:
             rtn += f"Available Dancers ({len(self._avaible)}):\n"
             for dnc in self._avaible:
