@@ -23,7 +23,7 @@ class Dancer:
 
     def print_full_data(self):
         print(f"Name: {self._name}\nID: {self.__id}\nGender: {self._gender}\nPresent: {self._present}\n"
-              f"DancedLast: {self._dancedLast}")
+              f"DancedLast: {self._dancedLast}\nNumDanced: {self._numDanced}")
 
     def __str__(self):
         return self._name
