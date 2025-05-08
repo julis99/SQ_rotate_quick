@@ -148,6 +148,8 @@ def sort_list_by_num_danced(lst: list[Dancer]) -> list[Dancer]:
                 continue
     return rtn
 
+def sort_list_by_name(lst: list[Dancer]) -> list[Dancer]:
+    return sorted(lst, key=lambda x: x.getName())
 
 if __name__ == "__main__":
     for dancer in get_present_dancers(sort_list_by_last_danced(load_data_base())):

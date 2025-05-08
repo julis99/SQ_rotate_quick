@@ -256,7 +256,8 @@ class Rotate:
 
     def print_ids(self) -> None:
         print("Registered Dancers:")
-        for dnc in self._avaible + self._pausing + self._away:
+        dncs = self._avaible + self._pausing + self._away
+        for dnc in sort_list_by_name(dncs):
             print(f"{dnc:>15} : [{dnc.getId()}]")
         print("====================================================================\n")
 
