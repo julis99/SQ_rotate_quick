@@ -171,4 +171,5 @@ cython_debug/
 .pypirc
 
 # dnc folder
-.dnc
+/dnc/*.dnc
+
