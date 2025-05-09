@@ -37,7 +37,7 @@ class Dancer:
         if format_spec[0] == "+":
             match format_spec[1]:
                 case "n":  # the number of danced rounds
-                    return str(self) + f"[n:{self._dancedLast}]"
+                    return str(self) + f"[l:{self._dancedLast}, n:{self._numDanced}]"
                 case "g":  # the gender
                     return str(self) + f"[g:{self._gender}]"
                 case "p":  # presence (True / False)

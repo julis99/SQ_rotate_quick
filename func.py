@@ -129,12 +129,13 @@ def sort_list_by_last_danced(lst: list[Dancer]) -> list[Dancer]:
             if dnc.getLastDanced() == minimum:
                 tmp.append(dnc)
                 lst.remove(dnc)
-                
-                continue
         rtn += sort_list_by_num_danced(tmp)
     return rtn
 
+
 def sort_list_by_num_danced(lst: list[Dancer]) -> list[Dancer]:
+    return sorted(lst, key=lambda x: x.getNumDanced())
+    """
     rtn = []
     while lst:
         minimum = 1000
@@ -147,6 +148,7 @@ def sort_list_by_num_danced(lst: list[Dancer]) -> list[Dancer]:
                 lst.remove(dnc)
                 continue
     return rtn
+    """
 
 def sort_list_by_name(lst: list[Dancer]) -> list[Dancer]:
     return sorted(lst, key=lambda x: x.getName())

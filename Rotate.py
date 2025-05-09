@@ -69,6 +69,9 @@ class Rotate:
     def __str__(self):
         rtn = ""
         self.evaluate(False)
+        rtn += f"------------------------------------------------------------\n"
+        rtn += f"            Details after Round {self.rounds:02}\n"
+        rtn += f"------------------------------------------------------------\n"
         if self._avaible:
             rtn += f"Available Dancers ({len(self._avaible)}):\n"
             for dnc in self._avaible:
