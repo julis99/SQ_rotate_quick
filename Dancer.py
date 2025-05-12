@@ -8,6 +8,7 @@ class Dancer:
         self._gender = ""
         self._present = False
         self._dancedLast = 0
+        #TODO: implement num_danced as new fraction class
         self._numDanced = 0
 
     def set_vals(self, name: str, id: str, gender: str, present: bool, last: int = 0, num: int = 0) -> None:

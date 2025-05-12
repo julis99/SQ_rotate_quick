@@ -101,6 +101,12 @@ def get_full_data():
 
 
 def load_data_base() -> list[Dancer]:
+    """
+    Loads all dancer files from the `./dnc` directory that have the `.dnc` extension.
+
+    :return: A list of `Dancer` objects parsed from the `.dnc` files in the `./dnc` directory
+    :rtype: list[Dancer]
+    """
     rtn = []
     for file in os.listdir("./dnc"):
         if file.endswith(".dnc"):
@@ -130,6 +136,7 @@ def sort_list_by_last_danced(lst: list[Dancer]) -> list[Dancer]:
                 tmp.append(dnc)
                 lst.remove(dnc)
         rtn += sort_list_by_num_danced(tmp)
+
     return rtn
 
 
