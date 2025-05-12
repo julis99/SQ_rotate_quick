@@ -36,7 +36,7 @@ def MAIN_handle_specials(word):
             exit(0)
         case "start":
             if not MAIN_new_round():
-                print(rt)
+                print(rt.detailed())
         case "print":
             print(rt)
         case "reset":
