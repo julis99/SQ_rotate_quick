@@ -1,4 +1,5 @@
 from Gender import Gender
+from frac import Fraction
 
 
 class Dancer:
@@ -9,9 +10,10 @@ class Dancer:
         self._present = False
         self._dancedLast = 0
         #TODO: implement num_danced as new fraction class
-        self._numDanced = 0
+        self._dancedFactor: Fraction = Fraction(0, 1)
 
-    def set_vals(self, name: str, id: str, gender: str, present: bool, last: int = 0, num: int = 0) -> None:
+    def set_vals(self, name: str, id: str, gender: str, present: bool, last: int = 0,
+                 num: Fraction = Fraction(0, 1)) -> None:
         """
         Sets the values of the dancer.
         """
@@ -20,11 +22,11 @@ class Dancer:
         self._gender = gender
         self._present = present
         self._dancedLast = last
-        self._numDanced = num
+        self._dancedFactor = num
 
     def print_full_data(self):
         print(f"Name: {self._name}\nID: {self.__id}\nGender: {self._gender}\nPresent: {self._present}\n"
-              f"DancedLast: {self._dancedLast}\nNumDanced: {self._numDanced}")
+              f"DancedLast: {self._dancedLast}\nDancedFactor: {self._dancedFactor}")
 
     def __str__(self):
         return self._name
@@ -38,13 +40,13 @@ class Dancer:
         if format_spec[0] == "+":
             match format_spec[1]:
                 case "n":  # the number of danced rounds
-                    return str(self) + f"[l:{self._dancedLast}, n:{self._numDanced}]"
+                    return str(self) + f"[l:{self._dancedLast}, f:{self._dancedFactor}]"
                 case "g":  # the gender
                     return str(self) + f"[g:{self._gender}]"
                 case "p":  # presence (True / False)
                     return str(self) + f"[p:{self._present}]"
                 case "a":  # all of the above
-                    return str(self) + f"[l:{self._dancedLast}, n:{self._numDanced}, g:{self._gender:3}, p:{self._present}]"
+                    return str(self) + f"[l:{self._dancedLast}, f:{self._dancedFactor}, g:{self._gender:3}, p:{self._present}]"
                 case _:  # wrong specifier given, just returning the string
                     return str(self) + f"[unknown spec {format_spec}]"
         try:
@@ -65,11 +67,14 @@ class Dancer:
 
     def danced(self, round: int):
         self._dancedLast = round
-        self._numDanced += 1
+        self._dancedFactor = self._dancedFactor.add_split(1, 1)
+
+    def notDanced(self):
+        self._dancedFactor = self._dancedFactor.add_split(0, 1)
 
     def resetNumbers(self):
         self._dancedLast = 0
-        self._numDanced = 0
+        self._dancedFactor = Fraction(0, 0)
 
     def save(self):
         try:
@@ -79,7 +84,8 @@ class Dancer:
                 else:
                     prs = "0"
                 f.writelines(
-                    [f"{self._name}\n", f"{self.__id}\n", f"{self._gender}\n", f"{prs}\n", f"{self._dancedLast}\n", f"{self._numDanced}"])
+                    [f"{self._name}\n", f"{self.__id}\n", f"{self._gender}\n", f"{prs}\n", f"{self._dancedLast}\n",
+                     f"{self._dancedFactor}"])
         except FileNotFoundError:
 
             print("File not found")
@@ -96,8 +102,8 @@ class Dancer:
     def getLastDanced(self) -> int:
         return self._dancedLast
     
-    def getNumDanced(self) -> int:
-        return self._numDanced
+    def getDancedFactor(self) -> Fraction:
+        return self._dancedFactor
 
     def getGender(self) -> str:
         return self._gender
@@ -117,7 +123,8 @@ def loadDancer(id: str) -> Dancer | None:
             name, id, gender, present_str, last_str, num_str = f.read().split("\n")
             rtn = Dancer()
             present = bool(int(present_str))
-            rtn.set_vals(name, id, gender, present, int(last_str), int(num_str))
+            f1_str, f2_str = num_str.split("/")
+            rtn.set_vals(name, id, gender, present, int(last_str), Fraction(int(f1_str), int(f2_str)))
             return rtn
     except FileNotFoundError:
         print(f"No Dancer with id [{id}] found")
@@ -127,10 +134,11 @@ def loadDancer(id: str) -> Dancer | None:
 def loadDancerFile(file: str) -> Dancer:
     if file.endswith(".dnc"):
         with open(file, "r") as f:
-            name, id, gender, present_str, last_str, num_str = f.read().split("\n")
+            name, id, gender, present_str, last_str, fact_str = f.read().split("\n")
             rtn = Dancer()
             present = bool(int(present_str))
-            rtn.set_vals(name, id, gender, present, int(last_str), int(num_str))
+            f1_str, f2_str = fact_str.split("/")
+            rtn.set_vals(name, id, gender, present, int(last_str), Fraction(int(f1_str), int(f2_str)))
             return rtn
         
 
@@ -149,8 +157,11 @@ def existDancer(id: str) -> bool:
 
 if __name__ == "__main__":
     dancer = Dancer()
-    dancer.set_vals("Julian Keune", "370452", "b", True, 5)
+    dancer.set_vals("Julian Keune", "370452", "b", True, 5, Fraction(1, 2))
     dancer.save()
     dancer2 = loadDancer("370452")
+    d3 = loadDancerFile("./dnc/370452.dnc")
     dancer2.print_full_data()
     print(f"{dancer2:+a}")
+    d3.danced(6)
+    print(f"{d3:+n}")

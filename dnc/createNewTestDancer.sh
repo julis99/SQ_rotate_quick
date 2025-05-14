@@ -16,8 +16,8 @@ options_0_1=("0" "1")
 
 random_b_g=${options_b_g[$RANDOM % ${#options_b_g[@]}]}
 random_0_1=${options_0_1[$RANDOM % ${#options_0_1[@]}]}
-random_int_1=$((RANDOM % 11))
-random_int_2=$((RANDOM % 11))
 
-printf "TEST DANCER %d\n%s\n%s\n%s\n%s\n%s" "$test_dancer_number" "$new_number" "$random_b_g" "$random_0_1" "$random_int_1" "$random_int_2" > "$new_filename"
+
+
+printf "TEST DANCER %d\n%s\n%s\n%s\n0\n0/0" "$test_dancer_number" "$new_number" "$random_b_g" "$random_0_1" > "$new_filename"
 echo "Created file: $new_filename"

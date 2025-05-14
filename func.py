@@ -141,7 +141,16 @@ def sort_list_by_last_danced(lst: list[Dancer]) -> list[Dancer]:
 
 
 def sort_list_by_num_danced(lst: list[Dancer]) -> list[Dancer]:
-    return sorted(lst, key=lambda x: x.getNumDanced())
+    rtn: list[Dancer] = []
+    while lst:
+        #TODO: write this algorithm
+        pass
+    return lst
+    """
+    return rtn
+    """
+
+
     """
     rtn = []
     while lst:

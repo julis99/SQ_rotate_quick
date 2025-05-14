@@ -19,13 +19,13 @@ def EVAL_dancers_danced(prints: bool = False) -> {int, int}:
     :rtype: list[int]
     """
     lst = load_data_base()
-    mini = 1000
-    maxi = 0
+    mini = Fraction(1, 1)
+    maxi = Fraction(0, 1)
     for dnc in lst:
-        if dnc.getNumDanced() < mini:
-            mini = dnc.getNumDanced()
-        if dnc.getNumDanced() > maxi:
-            maxi = dnc.getNumDanced()
+        if dnc.getDancedFactor() < mini:
+            mini = dnc.getDancedFactor()
+        if dnc.getDancedFactor() > maxi:
+            maxi = dnc.getDancedFactor()
     if prints:
         lst = sort_list_by_num_danced(lst)
         print(r"##############################EVAL##############################")

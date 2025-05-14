@@ -33,3 +33,25 @@ class Fraction:
 
     def __eq__(self, other):
         return self.float == other.float
+
+    def __lt__(self, other):
+        return self.float < other.float
+
+    def __gt__(self, other):
+        return self.float > other.float
+
+    def __le__(self, other):
+        return self.float <= other.float
+
+    def __ge__(self, other):
+        return self.float >= other.float
+
+    def add_split(self, add_to_num: int, add_to_den: int):
+        return Fraction(self.numerator + add_to_num, self.denominator + add_to_den)
+
+
+if __name__ == "__main__":
+    f1 = Fraction(1, 2)
+    f2 = Fraction(1, 4)
+    print(f1 + f2)
+
