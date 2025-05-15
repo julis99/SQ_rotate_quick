@@ -44,37 +44,51 @@ def EVAL_present_genders(prints: bool = False) -> tuple[int, int, int]:
         print(f"   BOYS : {numBoys}, {(numBoys / (numGirls + numBoth + numBoys)) * 100} %")
         print(f"   GIRLS: {numGirls}, {(numGirls / (numGirls + numBoth + numBoys)) * 100} %")
         print(f"   BOTH : {numBoth}, {(numBoth / (numGirls + numBoth + numBoys)) * 100} %")
+        print(r"")
+        print(f"  Total : {numGirls + numBoth + numBoys}")
         print(r"##############################ENDEVAL#############################")
     return numBoys, numGirls, numBoth
 
 
-def EVAL_dancers_danced(prints: bool = False) -> {int, int}:
+def EVAL_dancers_danced(prints: bool = False) -> tuple[Fraction, Fraction, int, int]:
     """
-    Evaluate the minimum and maximum number of dances performed by dancers in the database.
+    Evaluates dancers' participation and their danced factors based on the given data.
 
-    This function retrieves data about dancers from the database, determines the minimum
-    and maximum number of dances performed by any dancer in the dataset, and optionally
-    prints debugging information.
+    This function analyzes the list of dancers and computes various metrics such as
+    the minimum and maximum participation factors, the difference in the numerator,
+    the smallest and largest denominators, and displays relevant statistics if
+    requested. It returns a tuple containing the minimum factor, maximum factor,
+    and the maximum difference in the denominator.
 
-    :param prints: Optional; indicates whether to print debugging information to the
-                   console. Defaults to False.
-    :type prints: bool
-    :return: A list containing the minimum and maximum number of dances performed by
-             dancers. The first element represents the minimum and the second element
-             represents the maximum.
-    :rtype: list[int]
+    :param prints: A boolean flag. If True, prints a detailed evaluation of
+        dancer participation and factors. If False, only computes and returns
+        the metrics.
+    :return: A tuple containing three integers:
+        - minimum danced factor,
+        - maximum danced factor,
+        - maximum difference in participation denominators.
     """
     lst = load_data_base()
     mini = Fraction(1, 1)
     maxi = Fraction(0, 1)
+    max_diff = 0
+    min_diff = float('inf')
+    min_denom = float('inf')
+    max_denom = 0
     zero = Fraction(0, 0)
     for dnc in lst:
-        if dnc.getDancedFactor() == zero:
+        factor = dnc.getDancedFactor()
+        if factor == zero:
             continue
-        if dnc.getDancedFactor() < mini:
-            mini = dnc.getDancedFactor()
-        if dnc.getDancedFactor() > maxi:
-            maxi = dnc.getDancedFactor()
+        if factor < mini:
+            mini = factor
+        if factor > maxi:
+            maxi = factor
+        max_diff = max(max_diff, factor.denominator - factor.numerator)
+        min_diff = min(min_diff, factor.denominator - factor.numerator)
+        min_denom = min(min_denom, factor.denominator)
+        max_denom = max(max_denom, factor.denominator)
+
     if prints:
         lst = sort_list_by_last_danced(lst)
         print(r"###############################EVAL###############################")
@@ -82,8 +96,14 @@ def EVAL_dancers_danced(prints: bool = False) -> {int, int}:
         print(r"##################################################################")
         print(f" Minimum of particpations: {mini}")
         print(f" Maximum of particpations: {maxi}")
-        print(f" Difference in NUM       : {maxi.numerator - mini.numerator}")
+        print(f" Minimum of forced breaks: {min_diff}")
+        print(f" Maximum of forced breaks: {max_diff}")
         print(r"##################################################################")
+        print(r"                         Dancer Factors")
+        print(r"##################################################################")
+        print(f" Minimum denominator overall: {min_denom}")
+        print(f" Maximum denominator overall: {max_denom}")
+
         print(r" Dancers:")
         lst = sort_list_by_danced_factor(lst)
         for dnc in lst:
@@ -91,23 +111,33 @@ def EVAL_dancers_danced(prints: bool = False) -> {int, int}:
                 continue
             print(f"    {dnc:+a}")
         print(r"##############################ENDEVAL#############################")
-    return [mini, maxi]
+    return [mini, maxi, min_diff, max_diff]
 
 
-def TEST_test_rotation(runs: int):
+def TEST_test_rotation(runs: int, withPausing: bool = False):
     rt = Rotate()
     rt.reloadLists()
     rt.resetDancers()
     print(r"###############################TEST###############################")
     print(r"##################################################################")
     print(f" Performing {runs} rounds with {rt.possibleSquares} possible squares each")
+    if withPausing:
+        print(r"  with pausing Dancers")
+    else:
+        print(r"  without pausing Dancers")
     EVAL_present_genders(True)
     for i in range(runs):
         rt.newRound()
+        if withPausing:
+            rdm = random.randint(0, rt.getNumPresent() // 4)
+            for j in range(rdm):
+                rIdx = random.randint(0, rt.getNumAvailable() - 1)
+                rt.pauseDancer(rt._avaible[rIdx].getId())
     EVAL_dancers_danced(True)
     print(r"##################################################################")
     print(r"##############################ENDTEST#############################")
 
 
 if __name__ == "__main__":
-    TEST_test_rotation(100)
+    TEST_test_rotation(100, True)
+    #EVAL_dancers_danced(True)

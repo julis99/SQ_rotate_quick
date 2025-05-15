@@ -264,6 +264,12 @@ class Rotate:
             print(f"{dnc:>15} : [{dnc.getId()}]")
         print("====================================================================\n")
 
+    def getNumPresent(self):
+        return len(self._avaible) + len(self._pausing)
+
+    def getNumAvailable(self):
+        return len(self._avaible)
+
 
 if __name__ == "__main__":
     rt = Rotate()
