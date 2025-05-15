@@ -92,6 +92,7 @@ if __name__ == "__main__":
     f4 = f1 - f2
     f5 = f1 * f2
     f6 = f1 / f2
+    print(Fraction(3, 6)<=Fraction(2,6))
     arr = [f1, f2, f3, f4, f5, f6]
     new_idx = FRAC_sort_list_to_permutation(arr)
     for idx in new_idx:

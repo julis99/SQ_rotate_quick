@@ -103,6 +103,21 @@ class Rotate:
         return rtn
 
     def newRound(self) -> list[Square]:
+        """
+        Creates a new round of dance squares using available dancers, assigns them to squares,
+        and updates their states. The new round adjusts the distribution of available dancers
+        (boys and girls), shuffles them to ensure randomness, and creates squares with pairs
+        of dancers, while keeping track of the dancers that were left unused.
+
+        Dancers who performed in the round will have their state updated to reflect their
+        participation. Unused dancers will also have their state updated accordingly.
+
+        :return: List of Square objects representing the squares formed in the new round.
+        :rtype: list[Square]
+
+        :raises ValueError: If no squares are possible, an empty list is returned.
+
+        """
         self._currentSquares = []
         boys, girls, both = self.evaluate(True)
         if self.possibleSquares < 1:
@@ -110,11 +125,18 @@ class Rotate:
             return []
 
         self.rounds += 1
+        both = shuffle_list(both) #To have the both dancers dance both genders
         while both:
-            if len(boys) <= len(girls):
+            if len(boys) < len(girls):
                 boys.append(both.pop(0))
-            else:
+            elif len(boys) > len(girls):
                 girls.append(both.pop(0))
+            else:
+                rdm = random.randint(0, 1)
+                if rdm == 0:
+                    boys.append(both.pop(0))
+                else:
+                    girls.append(both.pop(0))
         boys = shuffle_list(boys)
         girls = shuffle_list(girls)
         boys = sort_list_by_last_danced(boys)

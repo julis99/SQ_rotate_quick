@@ -124,19 +124,18 @@ def get_present_dancers(lst: list[Dancer]) -> list[Dancer]:
 def sort_list_by_last_danced(lst: list[Dancer]) -> list[Dancer]:
     rtn = []
     while lst:
-        minimum = 1000
-        for dnc in lst:
-            if dnc.getLastDanced() < minimum:
-                minimum = dnc.getLastDanced()
-
+        minD = min(lst, key=lambda x: x.getLastDanced())
+        mini = minD.getLastDanced()
         tmp = []
-        for dnc in lst:
-            if dnc.getLastDanced() == minimum:
+        for i, dnc in enumerate(lst):
+            if dnc.getLastDanced() == mini:
                 tmp.append(dnc)
-                lst.remove(dnc)
+        for dnc in tmp:
+            lst.remove(dnc)
         rtn += sort_list_by_danced_factor(tmp)
-
     return rtn
+
+
 
 
 def sort_list_by_danced_factor(lst: list[Dancer]) -> list[Dancer]:
