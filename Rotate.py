@@ -30,7 +30,7 @@ class Rotate:
         self.possibleSquares = len(self._avaible) // 8
         self.evaluate(False)
 
-    def evaluate(self, retLists:bool = False)-> None | list[list[Dancer]]:
+    def evaluate(self, retLists: bool = False) -> None | list[list[Dancer]]:
         """
 
         :param retLists:
@@ -62,7 +62,7 @@ class Rotate:
         if retLists:
             return [boys, girls, both]
         return None
-    
+
     def manipulate(self, round: int) -> None:
         self.rounds = round
 
@@ -102,7 +102,6 @@ class Rotate:
             rtn += f"    {(8 - len(self._avaible)) % 8} Dancers needed for another square\n"
         return rtn
 
-
     def newRound(self) -> list[Square]:
         self._currentSquares = []
         boys, girls, both = self.evaluate(True)
@@ -116,11 +115,13 @@ class Rotate:
                 boys.append(both.pop(0))
             else:
                 girls.append(both.pop(0))
+        boys = shuffle_list(boys)
+        girls = shuffle_list(girls)
         boys = sort_list_by_last_danced(boys)
         girls = sort_list_by_last_danced(girls)
+        unused = boys[(self.possibleSquares*4):] + girls[(self.possibleSquares*4):]
         boys = boys[:(self.possibleSquares * 4)]
         girls = girls[:(self.possibleSquares * 4)]
-        unused = boys[(self.possibleSquares * 4):] + girls[(self.possibleSquares * 4):]
         num = 0
         while boys:
             cpLst = []
@@ -211,14 +212,14 @@ class Rotate:
         else:
             rtn += f"    {(8 - len(self._avaible)) % 8} Dancers needed for another square\n"
         return rtn
-    
+
     def clearAvailable(self):
         for dnc in self._avaible + self._pausing:
             dnc.switch_presence()
             dnc.save()
         self.reloadLists()
         return
-    
+
     def deleteDancer(self, id: str) -> None:
         for dnc in self._avaible + self._pausing + self._away:
             if dnc.getId() == id:
@@ -240,7 +241,6 @@ class Rotate:
         for dnc in sort_list_by_name(dncs):
             print(f"{dnc:>15} : [{dnc.getId()}]")
         print("====================================================================\n")
-
 
 
 if __name__ == "__main__":

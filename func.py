@@ -1,6 +1,7 @@
 import os
 
 from Dancer import *
+from frac import FRAC_sort_list_to_permutation
 
 
 def IPT_await(specials=None, msg="Awaiting input...: ") -> [str, bool]:
@@ -16,7 +17,8 @@ def IPT_await(specials=None, msg="Awaiting input...: ") -> [str, bool]:
             print("Wrong Input!")
             print(f"expected number or {specials}")
 
-def IPT_command(allowed: list[str], msg:str = "Enter command:")->str:
+
+def IPT_command(allowed: list[str], msg: str = "Enter command:") -> str:
     while True:
         ipt_str = input(msg)
         if allowed.__contains__(ipt_str):
@@ -70,6 +72,7 @@ def create_new_Dancer(new_id: str = None) -> Dancer:
         print("Deleting Dancer, starting over")
         return create_new_Dancer()
 
+
 def alter_existing_Dancer() -> Dancer:
     dnc_id, _ = IPT_await(msg="Enter Dancer Id: ")
     dnc = loadDancer(dnc_id)
@@ -89,10 +92,6 @@ def alter_existing_Dancer() -> Dancer:
             case "done":
                 dnc.save()
                 return dnc
-
-
-
-
 
 
 def get_full_data():
@@ -135,21 +134,19 @@ def sort_list_by_last_danced(lst: list[Dancer]) -> list[Dancer]:
             if dnc.getLastDanced() == minimum:
                 tmp.append(dnc)
                 lst.remove(dnc)
-        rtn += sort_list_by_num_danced(tmp)
+        rtn += sort_list_by_danced_factor(tmp)
 
     return rtn
 
 
-def sort_list_by_num_danced(lst: list[Dancer]) -> list[Dancer]:
-    rtn: list[Dancer] = []
-    while lst:
-        #TODO: write this algorithm
-        pass
-    return lst
+def sort_list_by_danced_factor(lst: list[Dancer]) -> list[Dancer]:
+    frac_lst = []
+    for dnc in lst:
+        frac_lst.append(dnc.getDancedFactor())
+    return reorder_list_by_index_permutation(lst, FRAC_sort_list_to_permutation(frac_lst))
     """
     return rtn
     """
-
 
     """
     rtn = []
@@ -166,8 +163,27 @@ def sort_list_by_num_danced(lst: list[Dancer]) -> list[Dancer]:
     return rtn
     """
 
+
 def sort_list_by_name(lst: list[Dancer]) -> list[Dancer]:
     return sorted(lst, key=lambda x: x.getName())
+
+
+def reorder_list_by_index_permutation(lst: list[object], idx_lst: list[int]) -> list[object]:
+    if len(lst) != len(idx_lst):
+        raise ValueError
+    rtn = []
+    for idx in idx_lst:
+        rtn.append(lst[idx])
+    return rtn
+
+
+def shuffle_list(lst: list[object]) -> list[object]:
+    import random
+    rtn = []
+    while lst:
+        rtn.append(lst.pop(random.randint(0, len(lst) - 1)))
+    return rtn
+
 
 if __name__ == "__main__":
     for dancer in get_present_dancers(sort_list_by_last_danced(load_data_base())):
