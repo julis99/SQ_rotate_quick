@@ -68,7 +68,6 @@ class Rotate:
 
     def __str__(self):
         rtn = ""
-        self.evaluate(False)
         rtn += f"------------------------------------------------------------\n"
         rtn += f"            Details after Round {self.rounds:02}\n"
         rtn += f"------------------------------------------------------------\n"
@@ -101,6 +100,13 @@ class Rotate:
         else:
             rtn += f"    {(8 - len(self._avaible)) % 8} Dancers needed for another square\n"
         return rtn
+
+    def __format__(self, format_spec):
+        if format_spec == "+all":
+            return self.detailed()
+        else:
+            return self.__str__()
+
 
     def newRound(self) -> list[Square]:
         """

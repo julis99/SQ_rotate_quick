@@ -88,14 +88,19 @@ def EVAL_dancers_danced(prints: bool = False) -> tuple[Fraction, Fraction, int, 
         min_diff = min(min_diff, factor.denominator - factor.numerator)
         min_denom = min(min_denom, factor.denominator)
         max_denom = max(max_denom, factor.denominator)
-
+    if min_diff == float('inf'):
+        if prints:
+            print(r"###############################EVAL###############################")
+            print(r"     No dancers participated in any rotation")
+            print(r"##############################ENDEVAL#############################")
+        return zero, zero, 0, 0
     if prints:
         lst = sort_list_by_last_danced(lst)
         print(r"###############################EVAL###############################")
         print(r"                      Dancer Participation")
         print(r"##################################################################")
-        print(f" Minimum of particpations: {mini}")
-        print(f" Maximum of particpations: {maxi}")
+        print(f" Minimum of particpations: {mini} = {mini.float}")
+        print(f" Maximum of particpations: {maxi} = {maxi.float}")
         print(f" Minimum of forced breaks: {min_diff}")
         print(f" Maximum of forced breaks: {max_diff}")
         print(r"##################################################################")
@@ -111,11 +116,12 @@ def EVAL_dancers_danced(prints: bool = False) -> tuple[Fraction, Fraction, int, 
                 continue
             print(f"    {dnc:+a}")
         print(r"##############################ENDEVAL#############################")
-    return [mini, maxi, min_diff, max_diff]
+    return mini, maxi, min_diff, max_diff
 
 
 def TEST_test_rotation(runs: int, withPausing: bool = False):
     rt = Rotate()
+    normallyAway: list[Dancer] = []
     rt.reloadLists()
     rt.resetDancers()
     print(r"###############################TEST###############################")

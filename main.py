@@ -1,7 +1,9 @@
 import os
+
+import tests
 from Rotate import *
 
-MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout", "manipulate", "delete", "show_ids", "help"]
+MAIN_SPECIALS = ["exit", "start", "print", "reset", "reload", "details", "new", "alter", "logout", "manipulate", "delete", "show_ids", "eval", "help"]
 MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              "Help Menu\n"
              "Enter your Barcode to become pausing, away, or available again\n"
@@ -18,6 +20,7 @@ MAIN_HELP = ("SQ - ROTATE - QUICK\n"
              " - manipulate - Manipulate the current round\n"
              " - delete     - Delete a Dancer\n"
              " - show_ids   - Shows all registered Dancer IDs\n"
+             " - eval       - Run different kind of evaluation functions\n"
              " - help       - Shows this menu")
 
 MAIN_WELCOME = r""" ____   ___      ____   ___ _____  _  _____ _____     ___  _   _ ___ ____ _  __
@@ -77,6 +80,8 @@ def MAIN_handle_specials(word):
                 print(f"No dancer with id [{id}] found")
         case "show_ids":
             rt.print_ids()
+        case "eval":
+            MAIN_eval()
         case "help":
             print(MAIN_HELP)
         case _:
@@ -92,6 +97,34 @@ def MAIN_new_round() -> bool:
     for square in sLst:
         print(square)
     return True
+
+EVAL_COMMANDS = ["gender", "participation", "part", "help"]
+EVAL_HELP = ("Evaluation Commands\n"
+             " - gender        - Show present gender distribution\n"
+             " - participation - Evaluate Participation\n"
+             " - part          - Shortcut for participation\n"
+             "Enter a special keyword:\n"
+             " - help          - Shows this menu")
+
+def MAIN_eval():
+    done = False
+    while not done:
+        match IPT_command(allowed=EVAL_COMMANDS, msg="Enter Evaluation Command (help for more info): "):
+            case "gender":
+                tests.EVAL_present_genders(prints=True)
+                done = True
+            case "participation":
+                tests.EVAL_dancers_danced(prints=True)
+                done = True
+            case "part":
+                tests.EVAL_dancers_danced(prints=True)
+                done = True
+            case "help":
+                print(EVAL_HELP)
+            case _:
+                print(EVAL_HELP)
+
+
 
 
 def main():
